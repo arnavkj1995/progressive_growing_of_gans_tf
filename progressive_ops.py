@@ -58,7 +58,7 @@ def wscale_layer(x):
     return y
 
 
-def progressive_kt(name, steps=5000):
+def progressive_kt(name, steps=50000):
     """ Claim a progressive changing scalar variable of kt, where steps
     indicates how many steps are required to progressively changing kt from 0
     to 1.
