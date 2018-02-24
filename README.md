@@ -4,6 +4,8 @@ This repository contains the **TensorFlow re-implementation (both training and s
 
 **Please checkout our [image inpainting](https://github.com/JiahuiYu/generative_inpainting) project as well. [Demo](http://jhyu.me/demo) is available for high-resolution CelebA-HQ face inpainting!**
 
+**Important Notice**: The [original implementation](https://github.com/tkarras/progressive_growing_of_gans) is now based on TensorFlow. You are recommended to use original implementation for reproducing results of paper. 
+
 ## Dataset: 1024x1024 CelebA faces
 
 PNG images can be downloaded from [Google Drive](https://drive.google.com/open?id=1_BsFYYGVvcjcPNhPam2STBDFG3eKAdKr) (download_7z).
