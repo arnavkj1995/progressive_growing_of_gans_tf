@@ -1,6 +1,6 @@
 # Progressive Growing of GANs for Improved Quality, Stability, and Variation on TensorFlow
 
-This repository contains the **TensorFlow re-implementation (both training and sampling)** of [original implementation (Theano and Lasagne)](https://github.com/tkarras/progressive_growing_of_gans). The author of this repo is actively training and debugging on 1024x1024 CelebA dataset.
+This repository contains the **TensorFlow re-implementation (both training and sampling)** of [original implementation (Theano and Lasagne)](https://github.com/tkarras/progressive_growing_of_gans).
 
 **Please checkout our [image inpainting](https://github.com/JiahuiYu/generative_inpainting) project as well. [Demo](http://jhyu.me/demo) is available for high-resolution CelebA-HQ face inpainting!**
 
@@ -15,7 +15,7 @@ Example High-Resolution CelebA images
 
 ## Training
 
-The author of this repo is actively training and debuging on 1024x1024 CelebA dataset. If you want to try early, please modify `progressive_gan.yml` accordingly and run `python train.py`.
+If you want to try this repo, please modify `progressive_gan.yml` accordingly and run `python train.py`.
 
 ## TensorBoard
 
