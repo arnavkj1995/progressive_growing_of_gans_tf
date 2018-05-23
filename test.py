@@ -54,7 +54,8 @@ if __name__ == "__main__":
         assign_ops = []
         for var in vars_list:
             vname = var.name
-            from_name = vname
+            print (vname)
+            from_name = vname.replace(':0',  '')
             var_value = tf.contrib.framework.load_variable(args.checkpoint_dir, from_name)
             assign_ops.append(tf.assign(var, var_value))
 

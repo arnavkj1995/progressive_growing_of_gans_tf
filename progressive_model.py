@@ -191,7 +191,7 @@ class ProgressiveGAN(Model):
             tf.GraphKeys.TRAINABLE_VARIABLES, 'D_paper')
         return g_vars, d_vars, losses
 
-    def build_graph_with_opt(self, z, mask, orig, config, reuse=True, summary=False):
+    def build_graph_with_opt(self, z, mask, orig, config, reuse=False, summary=False):
         """Build training graph and losses.
 
         Args:
@@ -220,7 +220,7 @@ class ProgressiveGAN(Model):
             config.LAST_RESOLUTION, config.CURRENT_RESOLUTION,
             reuse=reuse)
         pos = self.D_paper(
-            images,
+            orig,
             config.LAST_RESOLUTION, config.CURRENT_RESOLUTION,
             reuse=True)
 
@@ -232,7 +232,7 @@ class ProgressiveGAN(Model):
         complete_loss = contextual_loss #+ F.lam * perceptual_loss
         grad_complete_loss = tf.gradients(complete_loss, z)
         
-        return grad_complete_loss
+        #return grad_complete_loss
         # g_loss, d_loss = gan_wgan_loss(pos, neg)
 
         # ri = random_interpolates(images, fake)
