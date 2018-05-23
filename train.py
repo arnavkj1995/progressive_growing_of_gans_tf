@@ -40,6 +40,7 @@ def train_gan(config):
     img_shapes = [config.CURRENT_RESOLUTION, config.CURRENT_RESOLUTION, 3]
     data = ng.data.DataFromFNames(fnames, img_shapes)
 
+    fnames = [x.replace('images/', 'kys/') for x in fnames]
     # init model
     model = progressive_model.ProgressiveGAN(1024, config)
     g_vars, d_vars, losses = model.build_graph_with_losses(

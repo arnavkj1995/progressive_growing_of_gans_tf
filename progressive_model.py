@@ -64,7 +64,7 @@ class ProgressiveGAN(Model):
                 x = resize(x, 2)
                 block_resolution *= 2
                 x = nn_block(x, cnum, name='block%s' % block_resolution)
-            if current_resolution != 8:
+            if current_resolution != self.cfg.lod_initial_resolution * 2:
                 last_x = tf.layers.conv2d(
                     x, 3, 1, padding='same', name='%s_out' % block_resolution)
 
@@ -81,7 +81,7 @@ class ProgressiveGAN(Model):
                 x, 3, 1, padding='same', name='%s_out' % block_resolution)
             kt = progressive_kt('%s_kt' % block_resolution)
 
-        if current_resolution != 8:
+        if current_resolution != self.cfg.lod_initial_resolution * 2:
             x = kt * x + (1. - kt) * resize(last_x, 2)
         return x
 
@@ -118,7 +118,7 @@ class ProgressiveGAN(Model):
 
         # with tf.variable_scope(name, reuse=True):
         with tf.variable_scope(name, reuse=(reuse or False)):
-            if current_resolution != 8:
+            if current_resolution != self.cfg.lod_initial_resolution * 2:
                 cnum = get_cnum(current_resolution)
                 x = tf.layers.conv2d(
                     avg_pool(x_in), cnum, 3, padding='same', activation=act,
@@ -190,3 +190,22 @@ class ProgressiveGAN(Model):
         d_vars = tf.get_collection(
             tf.GraphKeys.TRAINABLE_VARIABLES, 'D_paper')
         return g_vars, d_vars, losses
+
+        #Edit this function
+    def build_server_graph(self, batch_data, reuse=False, is_training=False):
+        """
+        """
+        # generate mask, 1 represents masked point
+        batch_raw, masks_raw = tf.split(batch_data, 2, axis=2)
+        masks = tf.cast(masks_raw[0:1, :, :, 0:1] > 127.5, tf.float32)
+
+        batch_pos = batch_raw / 127.5 - 1.
+        batch_incomplete = batch_pos * (1. - masks)
+        # inpaint
+        x1, x2, flow = self.build_graph_with_losses(
+            batch_incomplete, masks, reuse=reuse, training=is_training,
+            config=None)
+        batch_predict = x2
+        # apply mask and reconstruct
+        batch_complete = batch_predict*masks + batch_incomplete*(1-masks)
+        return batch_complete

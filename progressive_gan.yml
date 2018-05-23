@@ -8,12 +8,12 @@ CURRENT_RESOLUTION: 64
 RANDOM_SEED: 1000
 LOG_DIR: 'celeba_hq'
 NUM_GPUS: 1
-GPU_ID: -1
+GPU_ID: 0
 
 # fixed training setting
 VAL_PSTEPS: 500
 TRAIN_SPE: 5000
-MAX_ITERS: 1000000
+MAX_ITERS: 800000
 VIZ_MAX_OUT: 30
 DATA_FLIST:
   celeba_hq: 'data/celeba_hq/train_shuffled.flist'
@@ -33,10 +33,10 @@ TRAIN:                                              # Training parameters:
   minibatch_overrides:                              # Minibatch sizes for high resolutions.
     256: 14
     512: 6
-    1024: 3
+    # 1024: 3
   rampup_kimg: 40                                   # Learning rate rampup.
   rampdown_kimg: 0                                  # Learning rate rampdown.
-  lod_initial_resolution: 4                         # Network resolution at the beginning.
+  lod_initial_resolution: 32                        # Network resolution at the beginning.
   lod_training_kimg: 600                            # Thousands of real images to show before doubling network resolution.
   lod_transition_kimg: 600                          # Thousands of real images to show when fading in new layers.
   total_kimg: 15000                                 # Thousands of real images to show in total.
