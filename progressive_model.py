@@ -191,6 +191,65 @@ class ProgressiveGAN(Model):
             tf.GraphKeys.TRAINABLE_VARIABLES, 'D_paper')
         return g_vars, d_vars, losses
 
+    def build_graph_with_opt(self, z, mask, orig, config, reuse=True, summary=False):
+        """Build training graph and losses.
+
+        Args:
+            data : dataset for sampling
+            config : config of training
+
+        Returns: vars of generator, vars of discriminator, loss of training
+
+        """
+        # images = data.data_pipeline(config.BATCH_SIZE)
+        # images = images/127.5 - 1.
+        # z = tf.placeholfer(tf.foat32, [config.BATCH_SIZE, 1, 1, 512], -1, 1, name='z')
+        # mask = tf.placeholder(tf.float32, [config.BATCH_SIZE, config.CURRENT_RESOLUTION, config.CURRENT_RESOLUTION, 3], name='mask')
+
+        fake = self.G_paper(
+            z,
+            config.LAST_RESOLUTION, config.CURRENT_RESOLUTION,
+            reuse=reuse)
+
+        # if summary:
+        #     images_summary(images, 'real_images', config.VIZ_MAX_OUT)
+        #     images_summary(fake, 'fake_images', config.VIZ_MAX_OUT)
+
+        neg = self.D_paper(
+            fake,
+            config.LAST_RESOLUTION, config.CURRENT_RESOLUTION,
+            reuse=reuse)
+        pos = self.D_paper(
+            images,
+            config.LAST_RESOLUTION, config.CURRENT_RESOLUTION,
+            reuse=True)
+
+        contextual_loss = tf.reduce_mean(tf.contrib.layers.flatten(
+                                                 tf.abs(tf.multiply(mask, fake) -
+                                                 tf.multiply(mask, orig))), 1)
+
+        # perceptual_loss = g_loss_actual
+        complete_loss = contextual_loss #+ F.lam * perceptual_loss
+        grad_complete_loss = tf.gradients(complete_loss, z)
+        
+        return grad_complete_loss
+        # g_loss, d_loss = gan_wgan_loss(pos, neg)
+
+        # ri = random_interpolates(images, fake)
+        # ri_out = self.D_paper(
+        #     ri,
+        #     config.LAST_RESOLUTION, config.CURRENT_RESOLUTION,
+        #     reuse=True)
+        # ri_loss = gradients_penalty(ri, ri_out)
+        # d_loss = d_loss + config.LOSS['iwass_lambda'] * ri_loss
+        # losses = {'g_loss': g_loss, 'd_loss': d_loss, 'ri_loss': ri_loss}
+
+        # g_vars = tf.get_collection(
+        #     tf.GraphKeys.TRAINABLE_VARIABLES, 'G_paper')
+        # d_vars = tf.get_collection(
+        #     tf.GraphKeys.TRAINABLE_VARIABLES, 'D_paper')
+        return fake, grad_complete_loss #g_vars, d_vars, losses
+        
         #Edit this function
     def build_server_graph(self, batch_data, reuse=False, is_training=False):
         """
