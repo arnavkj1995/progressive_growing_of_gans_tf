@@ -50,13 +50,14 @@ if __name__ == "__main__":
         # output = tf.saturate_cast(output, tf.uint8)
 
         # load pretrained model
-        vars_list = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-        assign_ops = []
-        for var in vars_list:
-            vname = var.name
-            from_name = vname
-            var_value = tf.contrib.framework.load_variable(args.checkpoint_dir, from_name)
-            assign_ops.append(tf.assign(var, var_value))
+        print (ProgressiveGAN.load(args.checkpoint_dir))
+        # vars_list = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+        # assign_ops = []
+        # for var in vars_list:
+        #     vname = var.name
+        #     from_name = vname
+        #     var_value = tf.contrib.framework.load_variable(args.checkpoint_dir, from_name)
+        #     assign_ops.append(tf.assign(var, var_value))
 
         ### Implement iterative opt here
         z_ = np.random.uniform(-1, 1, ([config.BATCH_SIZE, 1, 1, 512]))

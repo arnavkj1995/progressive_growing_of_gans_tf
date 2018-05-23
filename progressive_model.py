@@ -220,7 +220,7 @@ class ProgressiveGAN(Model):
             config.LAST_RESOLUTION, config.CURRENT_RESOLUTION,
             reuse=reuse)
         pos = self.D_paper(
-            images,
+            orig,
             config.LAST_RESOLUTION, config.CURRENT_RESOLUTION,
             reuse=True)
 
@@ -232,7 +232,7 @@ class ProgressiveGAN(Model):
         complete_loss = contextual_loss #+ F.lam * perceptual_loss
         grad_complete_loss = tf.gradients(complete_loss, z)
         
-        return grad_complete_loss
+        # return grad_complete_loss
         # g_loss, d_loss = gan_wgan_loss(pos, neg)
 
         # ri = random_interpolates(images, fake)
@@ -268,3 +268,13 @@ class ProgressiveGAN(Model):
         # apply mask and reconstruct
         batch_complete = batch_predict*masks + batch_incomplete*(1-masks)
         return batch_complete
+
+    def load(self, checkpoint_dir):
+        print(" [*] Reading checkpoints...")
+        ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
+        if ckpt and ckpt.model_checkpoint_path:
+            ckpt_name = os.path.basename(ckpt.model_checkpoint_path)
+            self.saver.restore(self.sess, os.path.join(checkpoint_dir, ckpt_name))
+            return True
+        else:
+            return False
