@@ -64,7 +64,7 @@ class ProgressiveGAN(Model):
                 x = resize(x, 2)
                 block_resolution *= 2
                 x = nn_block(x, cnum, name='block%s' % block_resolution)
-            if current_resolution != self.cfg.lod_initial_resolution * 2:
+            if current_resolution != 64:
                 last_x = tf.layers.conv2d(
                     x, 3, 1, padding='same', name='%s_out' % block_resolution)
 
@@ -81,7 +81,7 @@ class ProgressiveGAN(Model):
                 x, 3, 1, padding='same', name='%s_out' % block_resolution)
             kt = progressive_kt('%s_kt' % block_resolution)
 
-        if current_resolution != self.cfg.lod_initial_resolution * 2:
+        if current_resolution != 64:
             x = kt * x + (1. - kt) * resize(last_x, 2)
         return x
 
@@ -118,7 +118,7 @@ class ProgressiveGAN(Model):
 
         # with tf.variable_scope(name, reuse=True):
         with tf.variable_scope(name, reuse=(reuse or False)):
-            if current_resolution != self.cfg.lod_initial_resolution * 2:
+            if current_resolution != 64:
                 cnum = get_cnum(current_resolution)
                 x = tf.layers.conv2d(
                     avg_pool(x_in), cnum, 3, padding='same', activation=act,

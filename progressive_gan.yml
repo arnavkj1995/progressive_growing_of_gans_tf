@@ -1,6 +1,6 @@
 # tunable training setting
 DATASET: 'celeba_hq'
-BATCH_SIZE: 64
+BATCH_SIZE: 32
 LAST_RESOLUTION: 32
 CURRENT_RESOLUTION: 64
 # RESTORE_PREFIX: 'model_logs/20171203125910919153_ilcomp5q_celeba_hq_celeba_hq_8x8/snap'
@@ -16,7 +16,7 @@ TRAIN_SPE: 5000
 MAX_ITERS: 800000
 VIZ_MAX_OUT: 30
 DATA_FLIST:
-  celeba_hq: 'data/celeba_hq/train_shuffled.flist'
+  celeba_hq: 'flist'
 
 # inherit from config.py: https://github.com/tkarras/progressive_growing_of_gans/blob/master/config.py
 TRAIN:                                              # Training parameters:

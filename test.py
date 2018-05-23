@@ -37,7 +37,7 @@ if __name__ == "__main__":
     sess_config = tf.ConfigProto()
     sess_config.gpu_options.allow_growth = True
     with tf.Session(config=sess_config) as sess:
-        z = tf.placeholfer(tf.foat32, [config.BATCH_SIZE, 1, 1, 512], -1, 1, name='z')
+        z = tf.placeholder(tf.float32, [config.BATCH_SIZE, 1, 1, 512], name='z')
         mask = tf.placeholder(tf.float32, [config.BATCH_SIZE, config.CURRENT_RESOLUTION, config.CURRENT_RESOLUTION, 3], name='mask')
         orig = tf.placeholder(tf.float32, [config.BATCH_SIZE, config.CURRENT_RESOLUTION, config.CURRENT_RESOLUTION, 3], name='real_images')
 
